@@ -9,13 +9,12 @@ import APIFeatures from "./../utils/apiFeatures.js";
  */
 export const createOne = (Model) =>
   catchAsync(async (req, res, next) => {
-    if (req.file) req.body.photo = req.file.filename; // add file to the request bo
     const doc = await Model.create(req.body);
 
     res.status(201).json({
       status: "success",
       data: {
-        data: doc,
+        doc,
       },
     });
   });
@@ -38,7 +37,7 @@ export const getOne = (Model, popOptions) =>
     res.status(200).json({
       status: "success",
       data: {
-        data: doc,
+        doc,
       },
     });
   });
@@ -52,7 +51,10 @@ export const getAll = (Model) =>
   catchAsync(async (req, res, next) => {
     // To allow nested get reviews on tour (hack)
     let filter = {};
-    //if (req.params.tourId) filter = { tour: req.params.tourId };
+    if (req.params.facultyId) filter = { faculty: req.params.facultyId };
+    if (req.params.departmentId)
+      filter = { department: req.params.departmentId };
+    if (req.param.optionId) filter = filter = { option: req.params.optionId };
     // EXECUTE THE QUERY
     const features = new APIFeatures(Model.find(filter), req.query)
       .filter()
@@ -67,7 +69,7 @@ export const getAll = (Model) =>
       status: "success",
       results: docs.length,
       data: {
-        data: docs,
+        docs,
       },
     });
   });
@@ -91,7 +93,7 @@ export const updateOne = (Model) =>
     res.status(200).json({
       status: "success",
       data: {
-        data: doc,
+        doc,
       },
     });
   });
@@ -106,7 +108,7 @@ export const deleteOne = (Model) =>
     const doc = await Model.findByIdAndDelete(req.params.id);
 
     if (!doc) {
-      return next(new AppError("No tour found with that ID", 404));
+      return next(new AppError("No document found with that ID", 404));
     }
 
     res.status(204).json({
