@@ -22,6 +22,10 @@ const messageSchema = new mongoose.Schema(
       ref: "Faculty",
       required: [true, "message must belong to a faculty."],
     },
+    date: {
+      type: Date,
+      default: Date.now(),
+    },
   },
   {
     toJSON: { virtuals: true },
