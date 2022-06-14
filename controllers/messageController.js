@@ -1,8 +1,9 @@
-import Message from "../models/MessageModel.js";
+import Message from "../models/messageModel.js";
 import * as factory from "./handleFactory.js";
 
 export const setMessageFaculty = (req, res, next) => {
-  if (!req.body.faculty) req.body.faculty = req.params.facultyId;
+  if (!req.body.faculty)
+    req.body.faculty = req.params.facultyId || req.faculty.id;
   next();
 };
 
