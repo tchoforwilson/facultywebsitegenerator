@@ -3,6 +3,8 @@ import * as facultyController from "./../controllers/facultyController.js";
 import * as authController from "./../controllers/authController.js";
 import departmentRouter from "./departmentRoutes.js";
 import noticeRouter from "./noticeRoutes.js";
+import messageRouter from "./messageRoutes.js";
+import programRouter from "./programRoutes.js";
 
 const router = express.Router();
 
@@ -12,10 +14,10 @@ router.get("/logout", authController.logout);
 
 router.use("/:facultyId/departments", departmentRouter);
 router.use("/:facultyId/notices", noticeRouter);
+router.use("/:facultyId/messages", messageRouter);
+router.use("/:facultyId/programs", programRouter);
 
 router.route("/").get(facultyController.getAllFaculty);
-
-router.route("/:id").get(facultyController.getFaculty);
 
 // Protect all routes after this middleware
 router.use(authController.protect);
@@ -37,7 +39,7 @@ router.delete("/delete-account", facultyController.deleteAccount);
 
 router
   .route("/:id")
-  .patch(authController.protect, facultyController.updateFaculty)
-  .delete(authController.protect, facultyController.deleteFaculty);
+  .patch(facultyController.updateFaculty)
+  .delete(facultyController.deleteFaculty);
 
 export default router;

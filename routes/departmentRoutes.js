@@ -7,9 +7,6 @@ const router = express.Router({ mergeParams: true });
 
 router.use("/:departmentId/options", optionRouter);
 
-router.route("/").get(departmentController.getAllDepartment);
-router.route("/:id").get(departmentController.getDepartment);
-
 //PROTECT ALL MIDDLEWARE AFTER THIS ROUTES
 router.use(authController.protect);
 
@@ -18,11 +15,16 @@ router
   .post(
     departmentController.setDepartmentFaculty,
     departmentController.createDepartment
+  )
+  .get(
+    departmentController.setDepartmentFaculty,
+    departmentController.getAllDepartment
   );
 
 router
   .route("/:id")
   .patch(departmentController.updateDepartment)
+  .get(departmentController.getAllDepartment)
   .delete(departmentController.deleteDepartment);
 
 export default router;

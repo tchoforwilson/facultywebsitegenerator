@@ -8,8 +8,6 @@ import {
 
 const router = express.Router({ mergeParams: true });
 
-router.route("/").get(noticeController.getAllNotice);
-router.route("/:id").get(noticeController.getNotice);
 // PROTECT ALL  ROUTES AFTER THIS
 router.use(authController.protect);
 
@@ -20,9 +18,11 @@ router
     resizeSingleImage("notice", "notices"),
     noticeController.setNoticeFaculty,
     noticeController.createNotice
-  );
+  )
+  .get(noticeController.setNoticeFaculty, noticeController.getNotice);
 router
   .route("/:id")
+  .get(noticeController.getAllNotice)
   .patch(
     uploadSingleImage,
     resizeSingleImage("notice", "notices"),

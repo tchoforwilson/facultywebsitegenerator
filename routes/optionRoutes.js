@@ -1,18 +1,12 @@
 import express from "express";
 import * as optionController from "./../controllers/optionController.js";
 import { protect } from "./../controllers/authController.js";
-import programRouter from "./programRoutes.js";
 import {
   uploadSingleImage,
   resizeSingleImage,
 } from "./../utils/imageUpload.js";
 
 const router = express.Router({ mergeParams: true });
-
-router.route("/").get(optionController.getAllOption);
-router.route("/:id").get(optionController.getOption);
-
-router.use("/:optionId/programs", programRouter);
 
 router.use(protect);
 
@@ -23,7 +17,8 @@ router
     resizeSingleImage("option", "options"),
     optionController.setOptionDepartment,
     optionController.createOption
-  );
+  )
+  .get(optionController.setOptionDepartment, optionController.getAllOption);
 
 router
   .route("/:id")
@@ -32,6 +27,7 @@ router
     resizeSingleImage("option", "options"),
     optionController.updateOption
   )
+  .get(optionController.getOption)
   .delete(optionController.deleteOption);
 
 export default router;
