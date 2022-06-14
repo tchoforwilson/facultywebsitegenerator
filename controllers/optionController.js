@@ -25,7 +25,7 @@ export const createOption = catchAsync(async (req, res, next) => {
     data: option,
   });
 });
-export const getOption = factory.getOne(Option, "programs");
+export const getOption = factory.getOne(Option);
 export const getAllOption = factory.getAll(Option);
 export const updateOption = factory.updateOne(Option);
 export const deleteOption = factory.deleteOne(Option);

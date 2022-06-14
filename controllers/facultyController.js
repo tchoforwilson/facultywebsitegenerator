@@ -26,7 +26,6 @@ export const uploadFacultyImages = upload.fields([
 ]);
 
 export const resizeFacultyImages = catchAsync(async (req, res, next) => {
-  console.log(req.files.imageCover);
   // 1) Cover image
   if (req.files.imageCover && req.files.imageCover.length > 0) {
     req.body.imageCover = `faculty-${req.faculty.id}-${Date.now()}-cover.jpeg`;
@@ -79,7 +78,7 @@ export const updateAccount = catchAsync(async (req, res, next) => {
   if (req.body.password || req.body.passwordConfirm) {
     return next(
       new AppError(
-        "This route is not for password updates. Please use /updateAccount.",
+        "This route is not for password updates. Please use /update-account-password.",
         400
       )
     );
@@ -90,11 +89,16 @@ export const updateAccount = catchAsync(async (req, res, next) => {
     req.body,
     "name",
     "email",
-    "imageCover",
-    "images",
+    "contact",
     "about",
-    "description"
+    "description",
+    "facebookLink",
+    "whatsappLink",
+    "twitterLink"
   );
+  
+  if(req.body.imageCover) filteredBody.imageCover = req.body.imageCover;
+  if(req.body.images) filteredBody.images = req.body.images;
 
   // 3) Update user document
   const updatedFaculty = await Faculty.findByIdAndUpdate(
