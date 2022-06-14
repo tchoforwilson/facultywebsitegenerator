@@ -2,6 +2,14 @@ import mongoose from "mongoose";
 
 const programSchema = new mongoose.Schema(
   {
+    type: {
+      type: String,
+      required: [true, "A program must have a type"],
+      enum: {
+        values: ["graduate", "undergraduate"],
+        message: "Program is either undergraduate or graduate",
+      },
+    },
     name: {
       type: String,
       required: [true, "option name required!!"],
@@ -15,7 +23,6 @@ const programSchema = new mongoose.Schema(
         "A option name must have more or equal then 10 characters",
       ],
     },
-    image: String,
     duration: {
       type: String,
       required: [true, "Program must have a duration."],
@@ -23,7 +30,7 @@ const programSchema = new mongoose.Schema(
     objective: {
       type: String,
     },
-    skills: {
+    skill: {
       type: String,
     },
     employment: {
@@ -33,10 +40,17 @@ const programSchema = new mongoose.Schema(
       type: String,
       required: [true, "Admission requirements"],
     },
-    option: {
+    departments: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Department",
+        required: [true, "Program must belong to a department."],
+      },
+    ],
+    faculty: {
       type: mongoose.Schema.ObjectId,
       ref: "Option",
-      required: [true, "Program must belong to a specialty."],
+      required: [true, "Program must belong to a faculty."],
     },
   },
   {
@@ -46,8 +60,8 @@ const programSchema = new mongoose.Schema(
 );
 programSchema.pre(/^find/, function (next) {
   this.populate({
-    path: "option",
-    select: "-__v -passwordChangedAt",
+    path: "departments",
+    select: "+name",
   });
 
   next();
